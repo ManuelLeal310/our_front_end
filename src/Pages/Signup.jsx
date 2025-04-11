@@ -1,109 +1,69 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-const Signup = () => {
+function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const nav = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!username || !email || !password || !confirmPassword) {
-      setError("Please fill in all fields.");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    const userData = { username, email, password };
-
-    console.log("User registered successfully", userData);
-
-    setError("");
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 1000);
-  };
-
-  const handleInputChange = (setter) => (e) => {
-    setter(e.target.value);
-    if (error) {
-      setError("");
-    }
-  };
+  function handleSignup(event) {
+    event.preventDefault();
+    const adminToCreateInDB = { username, email, password };
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/admin/signup`, adminToCreateInDB)
+      .then((res) => {
+        console.log("user created in the DB", res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
-    <div className="signup-container">
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit} className="signup-form">
-        <div className="input-group">
-          <label htmlFor="username">Username</label>
+    <div>
+      <h3>Sign up with us</h3>
+      <form onSubmit={handleSignup}>
+        <label>
+          Username:
           <input
             type="text"
-            id="username"
+            placeholder="enter a username"
             value={username}
-            onChange={handleInputChange(setUsername)}
-            placeholder="Enter your username"
-            required
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
           />
-        </div>
-
-        <div className="input-group">
-          <label htmlFor="email">Email</label>
+        </label>
+        <label>
+          Email:
           <input
             type="email"
-            id="email"
+            placeholder="enter a email"
             value={email}
-            onChange={handleInputChange(setEmail)}
-            placeholder="Enter your email"
-            required
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
           />
-        </div>
-
-        <div className="input-group">
-          <label htmlFor="password">Password</label>
+        </label>
+        <label>
+          Password:
           <input
             type="password"
-            id="password"
+            placeholder="enter the password"
             value={password}
-            onChange={handleInputChange(setPassword)}
-            placeholder="Enter your password"
-            required
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
-        </div>
-
-        <div className="input-group">
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={handleInputChange(setConfirmPassword)}
-            placeholder="Confirm your password"
-            required
-          />
-        </div>
-
-        {error && <p className="error-message">{error}</p>}
-
-        <button type="submit" className="submit-btn">
-          Sign Up
-        </button>
+        </label>
+        <button>Signup</button>
       </form>
-
       <p>
-        Already have an account? <a href="/login">Login</a>
+        Already with us...<Link to="/login">Login</Link>
       </p>
     </div>
   );
-};
+}
 
 export default Signup;
