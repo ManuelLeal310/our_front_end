@@ -12,7 +12,7 @@ const AuthContextWrapper = ({ children }) => {
   const nav = useNavigate();
 
   const authenticateAdmin = async () => {
-    const tokenFromLocalStorage = localStorage.getItem("authToken");
+    const tokenFromLocalStorage = localStorage.getItem("adminToken");
     if (!tokenFromLocalStorage) {
       setCurrentAdmin(null);
       setIsLoading(false);
@@ -20,7 +20,7 @@ const AuthContextWrapper = ({ children }) => {
     } else {
       try {
         const responseFromVerifyRoute = await axios.get(
-          `${import.meta.env.Vite_API_URL}/admin/verify`,
+          `${import.meta.env.VITE_API_URL}/admin/verify`,
           {
             headers: {
               authorization: `Bearer ${tokenFromLocalStorage}`,
@@ -43,8 +43,8 @@ const AuthContextWrapper = ({ children }) => {
     authenticateAdmin();
   }, []);
   async function handleLogout() {
-    localStorage.removeItem("authToken");
-    await authenticateUser();
+    localStorage.removeItem("adminToken");
+    await authenticateAdmin();
     nav("/login");
   }
   return (

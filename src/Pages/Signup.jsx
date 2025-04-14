@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function Signup() {
   const [username, setUsername] = useState("");
@@ -10,11 +10,16 @@ function Signup() {
 
   function handleSignup(event) {
     event.preventDefault();
-    const adminToCreateInDB = { username, email, password };
+    const adminToCreateInDB = {
+      adminName: username,
+      email,
+      password: password,
+    };
     axios
       .post(`${import.meta.env.VITE_API_URL}/admin/signup`, adminToCreateInDB)
       .then((res) => {
         console.log("user created in the DB", res);
+        nav("/login");
       })
       .catch((err) => {
         console.log(err);
@@ -22,7 +27,7 @@ function Signup() {
   }
 
   return (
-    <div>
+    <div className="signup-page">
       <h3>Sign up with us</h3>
       <form onSubmit={handleSignup}>
         <label>
