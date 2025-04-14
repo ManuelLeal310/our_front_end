@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../Contexts/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const nav = useNavigate();
+  const { authenticateAdmin } = useContext(AuthContext);
 
   function handleLogin(event) {
     event.preventDefault();
@@ -16,6 +18,9 @@ function Login() {
       .then((res) => {
         console.log("admin was logged in", res);
         localStorage.setItem("adminToken", res.data.authToken);
+        return authenticateAdmin();
+      })
+      .then(() => {
         nav("/admin");
       })
       .catch((err) => {
