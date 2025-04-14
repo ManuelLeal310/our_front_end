@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
@@ -49,7 +50,7 @@ const AuthContextWrapper = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        currentUser,
+        currentAdmin,
         isLoading,
         isLoggedIn,
         authenticateAdmin,

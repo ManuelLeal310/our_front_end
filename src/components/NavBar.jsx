@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../Contexts/AuthContext";
 
 function NavBar() {
   const { isLoggedIn, handleLogout } = useContext(AuthContext);
