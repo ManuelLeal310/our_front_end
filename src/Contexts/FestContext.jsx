@@ -16,51 +16,75 @@ const FestContextWrapper = ({ children }) => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/fest/read`)
       .then((res) => {
-        console.log("all the festivals", res);
-        setFest(res.data.allFest);
+        console.log("All the festivals:", res.data);
+        setFest(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("Error fetching festivals:", err);
       });
   }
-  async function handleCreateFest(event, aFest) {
-    aFest.festName = aFest.festName.split(",");
 
-    const myFormData = new FormData();
-    myFormData.append("festName", aFest.festName);
-    myFormData.append("location", aFest.location);
-    myFormData.append("date", aFest.date);
-    myFormData.append("duration", aFest.duration);
-    myFormData.append("style", aFest.style);
-    myFormData.append("lineUp", aFest.lineUp);
+  async function handleCreateFest(event, aFest) {
+    event.preventDefault();
+
+    const festToCreate = {
+      festName: Array.isArray(aFest.festName)
+        ? aFest.festName
+        : aFest.festName.split(",").map((s) => s.trim()),
+
+      location: aFest.location,
+      date: aFest.date,
+      duration: aFest.duration,
+      style: aFest.style,
+
+      lineUp: Array.isArray(aFest.lineUp)
+        ? aFest.lineUp
+        : aFest.lineUp.split(",").map((s) => s.trim()),
+    };
+
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/fest/create`,
-        myFormData
+        festToCreate
       );
-      console.log("festival created", data);
+      console.log("Festival created:", data);
       setFest([data, ...fest]);
       nav("/all-fest");
     } catch (error) {
-      console.log(error);
+      console.log("Error creating festival:", error);
     }
   }
+
   function handleDeleteFest(festId) {
     axios
       .delete(`${import.meta.env.VITE_API_URL}/delete/${festId}`)
       .then((res) => {
-        console.log("fest removed from DB", res);
-        const filteredFest = fest.filter((fest) => {
-          if (fest._id !== festId) {
-            return true;
-          }
-        });
+        console.log("Festival removed from DB:", res);
+        const filteredFest = fest.filter((f) => f._id !== festId);
         setFest(filteredFest);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("Error deleting festival:", err);
       });
   }
+  function handleUpdateFest(festId, festToUpdate) {
+    axios
+      .put(
+        `${import.meta.env.VITE_API_URL}/fest/update/${festId}`,
+        festToUpdate
+      )
+      .then((res) => {
+        console.log("Festival updated:", res.data);
+        const updatedFest = fest.map((f) =>
+          f._id === festId ? { ...fest, ...res.data } : f
+        );
+        setFest(updatedFest);
+      })
+      .catch((err) => {
+        console.log("Error updating festival:", err);
+      });
+  }
+
   return (
     <FestContext.Provider
       value={{

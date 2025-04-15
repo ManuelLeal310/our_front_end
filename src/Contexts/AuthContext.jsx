@@ -1,7 +1,6 @@
-import axios from "axios";
-import { createContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -11,15 +10,18 @@ const AuthContextWrapper = ({ children }) => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const nav = useNavigate();
 
-  const authenticateAdmin = async () => {
-    const tokenFromLocalStorage = localStorage.getItem("adminToken");
-    if (!tokenFromLocalStorage) {
-      setCurrentAdmin(null);
-      setIsLoading(false);
-      setLoggedIn(false);
-    } else {
+  useEffect(() => {
+    const authenticateAdmin = async () => {
+      const tokenFromLocalStorage = localStorage.getItem("adminToken");
+      if (!tokenFromLocalStorage) {
+        setCurrentAdmin(null);
+        setIsLoading(false);
+        setLoggedIn(false);
+        return;
+      }
+
       try {
-        const responseFromVerifyRoute = await axios.get(
+        const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/admin/verify`,
           {
             headers: {
@@ -27,8 +29,8 @@ const AuthContextWrapper = ({ children }) => {
             },
           }
         );
-        console.log("athenticate user function", responseFromVerifyRoute);
-        setCurrentAdmin(responseFromVerifyRoute.data.payload);
+
+        setCurrentAdmin(response.data.payload);
         setIsLoading(false);
         setLoggedIn(true);
       } catch (error) {
@@ -37,25 +39,19 @@ const AuthContextWrapper = ({ children }) => {
         setIsLoading(false);
         setLoggedIn(false);
       }
-    }
-  };
-  useEffect(() => {
+    };
+
     authenticateAdmin();
   }, []);
-  async function handleLogout() {
+
+  const handleLogout = async () => {
     localStorage.removeItem("adminToken");
-    await authenticateAdmin();
     nav("/login");
-  }
+  };
+
   return (
     <AuthContext.Provider
-      value={{
-        currentAdmin,
-        isLoading,
-        isLoggedIn,
-        authenticateAdmin,
-        handleLogout,
-      }}
+      value={{ currentAdmin, isLoading, isLoggedIn, handleLogout }}
     >
       {children}
     </AuthContext.Provider>

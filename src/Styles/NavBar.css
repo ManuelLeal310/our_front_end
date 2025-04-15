@@ -1,0 +1,17 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .logo {
+  height: 40px;
+}
+
+.navbar .nav-buttons {
+  display: flex;
+  gap: 15px;
+}

@@ -1,41 +1,48 @@
-import { useContext } from "react";
-import { FestContext } from "../Contexts/FestContext";
-import { AuthContext } from "../Contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { createContext, useEffect, useState } from "react";
+import axios from "axios";
 
-export const AllFests = () => {
-  const { fest, handleDeleteFest } = useContext(FestContext);
-  const { currentAdmin } = useContext(AuthContext);
+export const FestContext = createContext();
+
+export const FestProvider = ({ children }) => {
+  const [fest, setFest] = useState([]);
+
+  const fetchFests = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/festivals/read");
+      setFest(res.data);
+    } catch (err) {
+      console.error("Error fetching festivals:", err);
+    }
+  };
+
+  const handleDeleteFest = async (festId) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      await axios.delete(
+        `http://localhost:5000/api/festivals/delete/${festId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setFest((prev) => prev.filter((filter) => filter._id !== festId));
+    } catch (err) {
+      console.error("Error deleting fest:", err.response?.data || err.message);
+      alert("You are not authorized to delete this festival.");
+    }
+  };
+
+  useEffect(() => {
+    fetchFests();
+  }, []);
 
   return (
-    <div className="admin-page">
-      <h2>All our festivals</h2>
-      {fest.map((oneFest) => {
-        return (
-          <div key={oneFest._id} className="fest-card">
-            <h3>FestName: {oneFest.festName}</h3>
-            <h3>Location: {oneFest.location}</h3>
-            <h3>Duration: {oneFest.duration}</h3>
-            <h3>Style: {oneFest.style}</h3>
-            <h3>LineUp</h3>
-            <ul>
-              {oneFest.lineUp.map((oneLineUp, index) => {
-                return <li key={index}>{oneLineUp}</li>;
-              })}
-            </ul>
-            {oneFest.owner._id === currentAdmin?._id ? (
-              <section>
-                <Link to={`/edit/${oneFest._id}`}>
-                  <button>Edit</button>
-                </Link>
-                <button onClick={() => handleDeleteFest(oneFest._id)}>
-                  Delete
-                </button>
-              </section>
-            ) : null}
-          </div>
-        );
-      })}
-    </div>
+    <FestContext.Provider value={{ fest, handleDeleteFest }}>
+      {children}
+    </FestContext.Provider>
   );
 };
+export default FestContext;

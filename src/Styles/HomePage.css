@@ -1,0 +1,19 @@
+.home-page {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.home-page .card {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.home-page button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #28a745;
+}

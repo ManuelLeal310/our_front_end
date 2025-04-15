@@ -13,7 +13,7 @@ function NavBar() {
         <button onClick={handleLogout}>Logout</button>
       ) : (
         <>
-          <Link to="/">
+          <Link to="/signup">
             <button>Sign Up</button>
           </Link>
           <Link to="/login">
