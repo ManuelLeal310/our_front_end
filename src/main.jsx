@@ -4,14 +4,14 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import "./index.css";
 import { AuthContextWrapper } from "./Contexts/AuthContext.jsx";
-import { TicketsContextWrapper } from "./Contexts/TicketsContext.jsx";
+import { FestContextWrapper } from "./Contexts/FestContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <TicketsContextWrapper>
-      <AuthContextWrapper>
+    <AuthContextWrapper>
+      <FestContextWrapper>
         <App />
-      </AuthContextWrapper>
-    </TicketsContextWrapper>
+      </FestContextWrapper>
+    </AuthContextWrapper>
   </BrowserRouter>
 );
