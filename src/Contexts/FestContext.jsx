@@ -14,7 +14,7 @@ const FestContextWrapper = ({ children }) => {
 
   function getAllFest() {
     axios
-      .get(`${import.meta.env.VITE_API_URL}/fest/allfest`)
+      .get(`${import.meta.env.VITE_API_URL}/fest/read`)
       .then((res) => {
         console.log("all the festivals", res);
         setFest(res.data.allFest);
@@ -45,34 +45,34 @@ const FestContextWrapper = ({ children }) => {
       console.log(error);
     }
   }
-  function handleDeleteFest (festId) {
-.delete(`${import.meta.env.VITE_API_URL}/fest/delete-fest/${festId}`)
-.then((res) => {
-    console.log("fest removed from DB", res);
-    const filteredFest = fest.filter((fest) => {
-if (fest._id !== festId) {
-    return true;
-}
-    });
-    setFest(filteredFest);
-})
-.catch((err) => {
-    console.log(err);
-})
+  function handleDeleteFest(festId) {
+    axios
+      .delete(`${import.meta.env.VITE_API_URL}/delete/${festId}`)
+      .then((res) => {
+        console.log("fest removed from DB", res);
+        const filteredFest = fest.filter((fest) => {
+          if (fest._id !== festId) {
+            return true;
+          }
+        });
+        setFest(filteredFest);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
-  return(
+  return (
     <FestContext.Provider
-    value={{
+      value={{
         fest,
         setFest,
         handleCreateFest,
         handleDeleteFest,
-    }}
+      }}
     >
-        {children}
-        </FestContext.Provider>
+      {children}
+    </FestContext.Provider>
   );
 };
-
 
 export { FestContext, FestContextWrapper };
