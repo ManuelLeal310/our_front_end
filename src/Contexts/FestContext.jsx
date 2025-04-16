@@ -53,7 +53,7 @@ const FestContextWrapper = ({ children }) => {
 
   function handleDeleteFest(festId) {
     axios
-      .delete(`${import.meta.env.VITE_API_URL}/delete/${festId}`)
+      .delete(`${import.meta.env.VITE_API_URL}/fest/delete/${festId}`)
       .then((res) => {
         console.log("Festival removed from DB:", res);
         const filteredFest = fest.filter((f) => f._id !== festId);
@@ -88,6 +88,7 @@ const FestContextWrapper = ({ children }) => {
         setFest,
         handleCreateFest,
         handleDeleteFest,
+        handleUpdateFest,
       }}
     >
       {children}

@@ -1,70 +1,70 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { FestContext } from "../Contexts/FestContext";
+import { ClubContext } from "../Contexts/ClubContext";
 
-export const EditFest = () => {
-  const [festName, setFestName] = useState("");
+export const EditClub = () => {
+  const [clubName, setClubName] = useState("");
   const [location, setLocation] = useState("");
-  const [duration, setDuration] = useState("");
+  const [date, setDate] = useState("");
   const [style, setStyle] = useState("");
   const [lineUp, setLineUp] = useState("");
-  const { festId } = useParams();
-  const { fest, setFest } = useContext(FestContext);
+  const { clubId } = useParams();
+  const { club, setClub } = useContext(ClubContext);
   const nav = useNavigate();
 
   useEffect(() => {
-    function getOneFest() {
+    function getOneClub() {
       axios
-        .get(`${import.meta.env.VITE_API_URL}/fest/read/${festId}`)
+        .get(`${import.meta.env.VITE_API_URL}/club/read/${clubId}`)
         .then((res) => {
-          console.log("Fetched festival data:", res.data);
-          setFestName(res.data.festName);
+          console.log("Fetched club data:", res.data);
+          setClubName(res.data.clubName);
           setLocation(res.data.location);
-          // setDuration(res.data.duration);
+          setDate(res.data.date);
           setStyle(res.data.style);
           setLineUp(res.data.lineUp);
         })
-        .catch((err) => console.log("Error fetching festival:", err));
+        .catch((err) => console.log("Error fetching club:", err));
     }
-    getOneFest();
-  }, [festId]);
+    getOneClub();
+  }, [clubId]);
 
-  function handleUpdateFest(event) {
+  function handleUpdateClub(event) {
     event.preventDefault();
 
-    const updatedFest = {
-      festName,
+    const updatedClub = {
+      clubName,
       location,
-      duration,
+      date,
       style,
       lineUp,
     };
 
     axios
-      .put(`${import.meta.env.VITE_API_URL}/fest/update/${festId}`, updatedFest)
+      .put(`${import.meta.env.VITE_API_URL}/club/update/${clubId}`, updatedClub)
       .then((res) => {
-        const updatedFestivals = fest.map((oneFest) =>
-          oneFest._id === festId ? res.data : oneFest
+        const updatedClub = club.map((oneClub) =>
+          oneClub._id === clubId ? res.data : oneClub
         );
-        setFest(updatedFestivals);
-        nav("/fest");
+        setClub(updatedClub);
+        nav("/club");
       })
       .catch((err) => {
-        console.error("Error updating festival:", err);
+        console.error("Error updating club:", err);
       });
   }
 
   return (
     <div>
-      <h3>Edit Festival</h3>
-      <form onSubmit={handleUpdateFest}>
+      <h3>Edit Club</h3>
+      <form onSubmit={handleUpdateClub}>
         <label>
-          Fest Name:
+          Club Name:
           <input
             type="text"
-            value={festName}
-            onChange={(e) => setFestName(e.target.value)}
+            value={clubName}
+            onChange={(e) => setClubName(e.target.value)}
           />
         </label>
         <br />
@@ -78,11 +78,11 @@ export const EditFest = () => {
         </label>
         <br />
         <label>
-          Duration:
+          Date:
           <input
             type="text"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
           />
         </label>
         <br />
@@ -110,4 +110,4 @@ export const EditFest = () => {
   );
 };
 
-export default EditFest;
+export default EditClub;

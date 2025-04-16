@@ -21,6 +21,9 @@ function NavBar() {
           </Link>
         </>
       )}
+      <Link to="/admin">
+        <button>Dashboard</button>
+      </Link>
     </nav>
   );
 }

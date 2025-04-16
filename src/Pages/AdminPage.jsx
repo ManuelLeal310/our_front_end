@@ -7,35 +7,6 @@ function Admin() {
   const { currentAdmin, isLoggedIn, handleLogout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`${import.meta.env.VITE_API_URL}/admin/verify`, {
-  //       headers: {
-  //         authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       navigate("/login");
-  //     });
-  // });
-
-  // useEffect(() => {
-  //   axios
-  //   .get(`${import.meta.env.VITE_API_URL}/admin/verify ${currentAdmin._id}`)
-  //   .then((res) => {
-  //     console.log(res.data);
-  //     setCurrentAdmin(res.data);
-  //   })
-  //   catch ((err)=>{
-  //     console.log(err);
-  //   });
-
-  // },[currentAdmin]);
-
   useEffect(() => {
     const verifyAdmin = async () => {
       try {
@@ -63,8 +34,15 @@ function Admin() {
           <button>Create Festival</button>
         </Link>
 
-        <Link to="/read/:festId">
+        <Link to="/fest">
           <button>All Festivals</button>
+        </Link>
+        <Link to="/club/create">
+          <button>Create Club</button>
+        </Link>
+
+        <Link to="/club">
+          <button>All Clubs</button>
         </Link>
 
         <button onClick={handleLogout}>Logout</button>
