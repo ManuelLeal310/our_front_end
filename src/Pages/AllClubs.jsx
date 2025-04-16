@@ -18,7 +18,9 @@ export const AllClubs = () => {
             </button>
             <h3>ClubName: {oneClub.clubName}</h3>
             <h3>Location: {oneClub.location}</h3>
+            <h3>Style: {oneClub.style}</h3>
             <h3>Date: {oneClub.date}</h3>
+
             <Link to={`/club/update/${oneClub._id}`}>
               <button>Update</button>
             </Link>
