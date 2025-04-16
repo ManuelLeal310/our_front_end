@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Admin() {
-  const { currentAdmin, isLoggedIn, handleLogout } = useContext(AuthContext);
+  const { currentAdmin, isLoggedIn, setCurrentAdmin, handleLogout } =
+    useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
