@@ -11,47 +11,53 @@ const AuthContextWrapper = ({ children }) => {
   const nav = useNavigate();
 
   useEffect(() => {
-    const authenticateAdmin = async () => {
-      const tokenFromLocalStorage = localStorage.getItem("adminToken");
-      if (!tokenFromLocalStorage) {
-        setCurrentAdmin(null);
-        setIsLoading(false);
-        setLoggedIn(false);
-        return;
-      }
-
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/admin/verify`,
-          {
-            headers: {
-              authorization: `Bearer ${tokenFromLocalStorage}`,
-            },
-          }
-        );
-
-        setCurrentAdmin(response.data.payload);
-        setIsLoading(false);
-        setLoggedIn(true);
-      } catch (error) {
-        console.log(error);
-        setCurrentAdmin(null);
-        setIsLoading(false);
-        setLoggedIn(false);
-      }
-    };
-
     authenticateAdmin();
   }, []);
 
+  const authenticateAdmin = async () => {
+    const tokenFromLocalStorage = localStorage.getItem("authToken");
+    if (!tokenFromLocalStorage) {
+      setCurrentAdmin(null);
+      setIsLoading(false);
+      setLoggedIn(false);
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/admin/verify`,
+        {
+          headers: {
+            authorization: `Bearer ${tokenFromLocalStorage}`,
+          },
+        }
+      );
+
+      setCurrentAdmin(response.data.payload);
+      setIsLoading(false);
+      setLoggedIn(true);
+    } catch (error) {
+      console.log(error);
+      setCurrentAdmin(null);
+      setIsLoading(false);
+      setLoggedIn(false);
+    }
+  };
+
   const handleLogout = async () => {
-    localStorage.removeItem("adminToken");
+    localStorage.removeItem("authToken");
     nav("/login");
   };
 
   return (
     <AuthContext.Provider
-      value={{ currentAdmin, isLoading, isLoggedIn, handleLogout }}
+      value={{
+        currentAdmin,
+        isLoading,
+        isLoggedIn,
+        handleLogout,
+        authenticateAdmin,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -28,18 +28,14 @@ const FestContextWrapper = ({ children }) => {
     event.preventDefault();
 
     const festToCreate = {
-      festName: Array.isArray(aFest.festName)
-        ? aFest.festName
-        : aFest.festName.split(",").map((s) => s.trim()),
+      festName: aFest.festName,
 
       location: aFest.location,
       date: aFest.date,
       duration: aFest.duration,
       style: aFest.style,
 
-      lineUp: Array.isArray(aFest.lineUp)
-        ? aFest.lineUp
-        : aFest.lineUp.split(",").map((s) => s.trim()),
+      lineUp: aFest.lineUp,
     };
 
     try {
@@ -49,7 +45,7 @@ const FestContextWrapper = ({ children }) => {
       );
       console.log("Festival created:", data);
       setFest([data, ...fest]);
-      nav("/all-fest");
+      nav("/fest");
     } catch (error) {
       console.log("Error creating festival:", error);
     }

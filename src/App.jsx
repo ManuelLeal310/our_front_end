@@ -8,7 +8,7 @@ import NotFoundPage from "./Pages/NotFoundPage";
 import HomePage from "./Pages/HomePage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import EditFest from "./Pages/EditFest";
-import AllFests from "./Pages/AllFests";
+import { AllFests } from "./Pages/AllFests";
 import CreateFest from "./Pages/CreateFest";
 
 import { FestContextWrapper } from "./Contexts/FestContext";
@@ -44,14 +44,14 @@ function App() {
             }
           />
           <Route
-            path="/edit/:festId"
+            path="/update/:festId"
             element={
               <ProtectedRoute>
                 <EditFest />
               </ProtectedRoute>
             }
           />
-          <Route path="/fests" element={<AllFests />} />
+          <Route path="/fest" element={<AllFests />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </FestContextWrapper>

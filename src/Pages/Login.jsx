@@ -17,12 +17,13 @@ function Login() {
       .post(`${import.meta.env.VITE_API_URL}/admin/login`, adminToLogin)
       .then((res) => {
         console.log("admin was logged in", res);
-        localStorage.setItem("adminToken", res.data.authToken);
+        localStorage.setItem("authToken", res.data.authToken);
         return authenticateAdmin();
       })
       .then(() => {
         nav("/admin");
       })
+
       .catch((err) => {
         console.log(err);
         setErrorMessage(err.response.data.errorMessage);

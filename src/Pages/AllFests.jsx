@@ -1,48 +1,23 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { FestContext } from "../Contexts/FestContext";
 
-export const FestContext = createContext();
-
-export const FestProvider = ({ children }) => {
-  const [fest, setFest] = useState([]);
-
-  const fetchFests = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/festivals/read");
-      setFest(res.data);
-    } catch (err) {
-      console.error("Error fetching festivals:", err);
-    }
-  };
-
-  const handleDeleteFest = async (festId) => {
-    const token = localStorage.getItem("token");
-
-    try {
-      await axios.delete(
-        `http://localhost:5000/api/festivals/delete/${festId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setFest((prev) => prev.filter((filter) => filter._id !== festId));
-    } catch (err) {
-      console.error("Error deleting fest:", err.response?.data || err.message);
-      alert("You are not authorized to delete this festival.");
-    }
-  };
-
-  useEffect(() => {
-    fetchFests();
-  }, []);
+export const AllFests = () => {
+  const { fest } = useContext(FestContext);
+  console.log(fest);
 
   return (
-    <FestContext.Provider value={{ fest, handleDeleteFest }}>
-      {children}
-    </FestContext.Provider>
+    <>
+      <h2>all festivals</h2>
+      {fest.map((oneFest) => {
+        return (
+          <div key={oneFest._id} className="one-fest-card">
+            <h3>festName: {oneFest.festName}</h3>
+            <h3>Location: {oneFest.location}</h3>
+            <h3>duration: {oneFest.duration}</h3>
+          </div>
+        );
+      })}
+    </>
   );
 };
-export default FestContext;

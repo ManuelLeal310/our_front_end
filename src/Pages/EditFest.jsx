@@ -13,25 +13,23 @@ export const EditFest = () => {
   const { fest, setFest } = useContext(FestContext);
   const nav = useNavigate();
 
-  // Fetch the festival details when the page loads
   useEffect(() => {
     function getOneFest() {
       axios
         .get(`${import.meta.env.VITE_API_URL}/fest/read/${festId}`)
         .then((res) => {
           console.log("Fetched festival data:", res.data);
-          setFestName(res.data.festName); // Ensure this matches the backend field names
+          setFestName(res.data.festName);
           setLocation(res.data.location);
           setDuration(res.data.duration);
           setStyle(res.data.style);
-          setLineUp(res.data.lineUp.join(",")); // If lineUp is an array, join it with commas
+          setLineUp(res.data.lineUp.join(","));
         })
         .catch((err) => console.log("Error fetching festival:", err));
     }
     getOneFest();
   }, [festId]);
 
-  // Handle the form submission for updating the festival
   function handleUpdateFest(event) {
     event.preventDefault();
 
@@ -40,18 +38,17 @@ export const EditFest = () => {
       location,
       duration,
       style,
-      lineUp: lineUp.split(","), // Split back into an array on submission
+      lineUp: lineUp.split(","),
     };
 
     axios
       .put(`${import.meta.env.VITE_API_URL}/fest/update/${festId}`, updatedFest)
       .then((res) => {
-        // Update the festival in the context state after successful update
         const updatedFestivals = fest.map((oneFest) =>
           oneFest._id === festId ? res.data : oneFest
         );
         setFest(updatedFestivals);
-        nav("/fests"); // Navigate to all festivals page after update
+        nav("/fest");
       })
       .catch((err) => {
         console.error("Error updating festival:", err);

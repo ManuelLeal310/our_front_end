@@ -31,7 +31,7 @@ export const CreateFest = () => {
       location,
       duration,
       style,
-      lineUp: lineUpArray,
+      lineUp,
       adminId: currentAdmin.id,
     };
 
