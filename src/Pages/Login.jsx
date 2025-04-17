@@ -59,9 +59,9 @@ function Login() {
         <button>Login</button>
       </form>
       {errorMessage ? <p>{errorMessage}</p> : null}
-      <p>
+      {/* <p>
         New here...<Link to="/">Sign up</Link>
-      </p>
+      </p> */}
     </div>
   );
 }
